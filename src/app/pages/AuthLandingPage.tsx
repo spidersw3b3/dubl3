@@ -17,7 +17,7 @@ export function AuthLandingPage() {
   return (
     <div className="flex min-h-full flex-col px-6">
       <div className="flex flex-1 flex-col items-center justify-center pt-[15vh]">
-        <DublLogo className="h-12 w-20 text-[var(--accent)]" />
+        <DublLogo className="h-14 w-14" />
         <h1 className="mt-6 text-display-l tracking-[0.35em] font-bold">DUBL</h1>
       </div>
 

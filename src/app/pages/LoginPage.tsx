@@ -36,7 +36,7 @@ export function LoginPage() {
       </Link>
 
       <div className="mb-8 flex flex-col items-center">
-        <DublLogo className="h-10 w-16 text-[var(--accent)]" />
+        <DublLogo className="h-12 w-12" />
         <h1 className="mt-4 text-heading">Welcome back</h1>
       </div>
 
