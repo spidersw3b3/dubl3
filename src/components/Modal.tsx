@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useGuardedClose } from '@/hooks/useConfirmClose'
 
 export interface ModalProps {
   open: boolean
@@ -8,15 +9,17 @@ export interface ModalProps {
   title?: string
   children: ReactNode
   className?: string
+  isDirty?: boolean
 }
 
-export function Modal({ open, onClose, title, children, className }: ModalProps) {
+export function Modal({ open, onClose, title, children, className, isDirty }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null)
+  const guardedClose = useGuardedClose(onClose, isDirty)
 
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') guardedClose()
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
@@ -24,7 +27,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [open, onClose])
+  }, [open, guardedClose])
 
   if (!open) return null
 
@@ -39,7 +42,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
         type="button"
         className="absolute inset-0 bg-[var(--overlay)]"
         aria-label="Close modal"
-        onClick={onClose}
+        onClick={guardedClose}
       />
       <div
         ref={panelRef}
@@ -56,7 +59,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             </h2>
             <button
               type="button"
-              onClick={onClose}
+              onClick={guardedClose}
               className="rounded-full p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               aria-label="Close"
             >

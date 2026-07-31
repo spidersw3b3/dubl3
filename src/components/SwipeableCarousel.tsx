@@ -4,10 +4,16 @@ import { cn } from '@/lib/utils'
 export interface SwipeableCarouselProps {
   items: ReactNode[]
   className?: string
+  onIndexChange?: (index: number) => void
 }
 
-export function SwipeableCarousel({ items, className }: SwipeableCarouselProps) {
+export function SwipeableCarousel({ items, className, onIndexChange }: SwipeableCarouselProps) {
   const [index, setIndex] = useState(0)
+
+  const goTo = (i: number) => {
+    setIndex(i)
+    onIndexChange?.(i)
+  }
 
   if (items.length === 0) return null
 
@@ -20,8 +26,8 @@ export function SwipeableCarousel({ items, className }: SwipeableCarouselProps) 
           const el = e.currentTarget
           const onEnd = (ev: TouchEvent) => {
             const delta = ev.changedTouches[0].clientX - startX
-            if (delta > 50 && index > 0) setIndex(index - 1)
-            if (delta < -50 && index < items.length - 1) setIndex(index + 1)
+            if (delta > 50 && index > 0) goTo(index - 1)
+            if (delta < -50 && index < items.length - 1) goTo(index + 1)
             el.removeEventListener('touchend', onEnd)
           }
           el.addEventListener('touchend', onEnd, { once: true })
@@ -45,7 +51,7 @@ export function SwipeableCarousel({ items, className }: SwipeableCarouselProps) 
               key={i}
               type="button"
               aria-label={`Go to slide ${i + 1}`}
-              onClick={() => setIndex(i)}
+              onClick={() => goTo(i)}
               className={cn(
                 'h-2 w-2 rounded-full transition-colors',
                 i === index ? 'bg-[var(--accent)]' : 'bg-[var(--border)]',

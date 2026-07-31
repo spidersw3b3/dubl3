@@ -73,7 +73,7 @@ Overlay routes: Pay, Send, Add Bank, Add Wallet, Crypto modals.
 
 - Base path: `/dubl-admin-7k2m9/*`
 - Kill switch: `VITE_ADMIN_DISABLED`
-- JWT auth + action-registry edge API
+- Mock session auth + action-registry pattern (Supabase edge stub)
 - Every mutation → confirm dialog + reason → `admin_audit_log`
 
 ---
@@ -82,6 +82,6 @@ Overlay routes: Pay, Send, Add Bank, Add Wallet, Crypto modals.
 
 - [x] No service role key in client
 - [x] Money via RPC only (Phase 0 schema)
-- [ ] Edge function idempotency (Phase 8)
+- [x] Edge function idempotency (Phase 8 — mock + edge stub)
 - [ ] PAN never stored — last4 only (Phase 2)
-- [ ] Double Credit Agreement gate (Phase 5)
+- [x] Double Credit Agreement gate (Phase 5)

@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useGuardedClose } from '@/hooks/useConfirmClose'
 
 export interface SheetProps {
   open: boolean
@@ -8,14 +9,17 @@ export interface SheetProps {
   title?: string
   children: ReactNode
   className?: string
+  isDirty?: boolean
 }
 
 /** Bottom sheet variant for send/pay flows */
-export function Sheet({ open, onClose, title, children, className }: SheetProps) {
+export function Sheet({ open, onClose, title, children, className, isDirty }: SheetProps) {
+  const guardedClose = useGuardedClose(onClose, isDirty)
+
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') guardedClose()
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
@@ -23,7 +27,7 @@ export function Sheet({ open, onClose, title, children, className }: SheetProps)
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [open, onClose])
+  }, [open, guardedClose])
 
   if (!open) return null
 
@@ -33,7 +37,7 @@ export function Sheet({ open, onClose, title, children, className }: SheetProps)
         type="button"
         className="absolute inset-0 bg-[var(--overlay)]"
         aria-label="Close sheet"
-        onClick={onClose}
+        onClick={guardedClose}
       />
       <div
         className={cn(
@@ -48,7 +52,7 @@ export function Sheet({ open, onClose, title, children, className }: SheetProps)
             <h2 className="text-title">{title}</h2>
             <button
               type="button"
-              onClick={onClose}
+              onClick={guardedClose}
               className="rounded-full p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               aria-label="Close"
             >

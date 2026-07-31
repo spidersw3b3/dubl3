@@ -1,2 +1,2 @@
-/** Admin module — Phase 7 */
-export {}
+export { AdminRoutes } from '@/admin/AdminRoutes'
+export { AdminAuthProvider, useAdminAuth } from '@/admin/context/AdminAuthProvider'
